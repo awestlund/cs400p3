@@ -22,19 +22,19 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
 	/*
 	 * Instance variables and constructors
 	 */
-	protected int table_size;
+	protected int TABLE_SIZE;
 	protected double loadFactor;
 	protected LinkedList<V>[] table;
 	// how to handle collisions? -> linked lists
 	public HashTable() {
 		//constructor
-		this.table_size = 100;
-		table  = (LinkedList<V>[]) new LinkedList[table_size]; // our hash table
+		this.TABLE_SIZE = 100;
+		table  = (LinkedList<V>[]) new LinkedList[TABLE_SIZE]; // our hash table
 	}
 	public HashTable(int initialCapacity, double loadFactor) {
-		this.table_size = initialCapacity;
+		this.TABLE_SIZE = initialCapacity;
 		this.loadFactor = loadFactor;
-		table  = (LinkedList<V>[]) new LinkedList[table_size]; // our hash table
+		table  = (LinkedList<V>[]) new LinkedList[TABLE_SIZE]; // our hash table
 	}
 	@Override
 	public V put(K key, V value) {
@@ -63,9 +63,11 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
 
 	@Override
 	public void clear() {
-		// TODO: Implement this method
+		for (int i = 0; i < table.length; i++) {
+            		table[i] = null;
+       		}
+   	}
 		// go through array and set all values to null/0
-	}
 
 	@Override
 	public V get(K key) {
