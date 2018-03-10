@@ -22,11 +22,19 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
 	/*
 	 * Instance variables and constructors
 	 */
-	protected int table_size = 100;
-	protected LinkedList<V>[] table = (LinkedList<V>[]) new LinkedList[table_size]; // our hash table
+	protected int table_size;
+	protected double loadFactor;
+	protected LinkedList<V>[] table;
 	// how to handle collisions? -> linked lists
 	public HashTable() {
 		//constructor
+		this.table_size = 100;
+		table  = (LinkedList<V>[]) new LinkedList[table_size]; // our hash table
+	}
+	public HashTable(int initialCapacity, double loadFactor) {
+		this.table_size = initialCapacity;
+		this.loadFactor = loadFactor;
+		table  = (LinkedList<V>[]) new LinkedList[table_size]; // our hash table
 	}
 	@Override
 	public V put(K key, V value) {
@@ -64,6 +72,12 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
 		// TODO: Implement the get method
 		int index = hash(key) % table.length;
 		// key equal to search key: search hit
+		if (table[index] != null) {
+			Iterator Iterator = table[index].iterator();
+			while(Iterator.hasNext()) {
+				if (Iterator.next() == key); //wrong need value to know what node it would be?
+			}
+		}
 		// empty position (null key at indexed position): search miss
 		// key not equal to search key: try next entry
 		return null;
