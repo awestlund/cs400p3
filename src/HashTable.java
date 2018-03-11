@@ -2,56 +2,65 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 public class HashTable<K, V> implements HashTableADT<K, V> {
-	// protected static class Bucket<K, V> implements HashTableADT<K, V> {
-	// V value;
-	// Bucket<K, V> prev;
-	// Bucket<K, V> next;
-	// public Bucket (V item) {
-	// this.value = item;
-	// this.next = null;
-	// this.prev = null;
-	// }
-	// public Bucket (V item, int index) {
-	// this.value = item;
-	// this.next = null;
-	// //the last one entered in this bucket
-	// this.prev = table[index];
-	// }
-	// }
 
 	/*
 	 * Instance variables and constructors
 	 */
-	protected int table_size;
+	protected int table_size; // changes when load factor is hit, not static
 	protected double loadFactor;
-	protected LinkedList<V>[] table; //array of type linked list
+	protected LinkedList<V>[] expanded;
+	protected LinkedList<V>[] table; // array of type linked list
 	// how to handle collisions? -> linked lists
+
 	public HashTable() {
-		//constructor
+		// constructor
 
 		this.table_size = 100;
 		this.loadFactor = 0.75;
-		table  = (LinkedList<V>[]) new LinkedList[table_size]; // our hash table
+		table = (LinkedList<V>[]) new LinkedList[table_size]; // our hash table
 
 		this.table_size = 100;
-		table  = (LinkedList<V>[]) new LinkedList[table_size]; // our hash table
+		table = (LinkedList<V>[]) new LinkedList[table_size]; // our hash table
 
 	}
+
 	public HashTable(int initialCapacity, double loadFactor) {
 		this.table_size = initialCapacity;
 		this.loadFactor = loadFactor;
-		table  = (LinkedList<V>[]) new LinkedList[table_size]; // our hash table
+		table = (LinkedList<V>[]) new LinkedList[table_size]; // our hash table
 	}
+
 	@Override
+	/**
+	 *
+	 * @param key
+	 *            : The key that goes into the hashtable
+	 * @param value:
+	 *            The Value associated with the key
+	 * @return value of the key added to the hashtable, throws NullPointerException
+	 *         if key is null
+	 */
 	public V put(K key, V value) {
 		// TODO: Implement put method - using efficient algorithm
 		// update array size if needed
+		// check load factor ^^
 		// rehash if needed
 
 		// find index
 		// see if value is a duplicate
-		int index = hash(key) % table.length;
-		return null;
+		if (value == null) {
+			return null;
+		} else {
+			try {
+				int index = hash(key) % table.length;
+				// put in array at the index, if index already has values, add to the end of the
+				// linked list?
+				table[index].add(value); // add to the array in the correct linked list
+				return value;
+			} catch (NullPointerException e) {
+				return null;
+			}
+		}
 	}
 
 	private int hash(K key) {
@@ -61,21 +70,28 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
 
 	private void rehash() {
 		// new array size
+		// i don't know how to do this
 	}
 
 	private void expand() {
+		// expand the array size when the load factor is hit
 		// double the array size
+		expanded = (LinkedList<V>[]) new LinkedList[table_size * 2];
+		// rehash
+		// replace table array w/ expanded array (named table array)
+
 	}
 
 	@Override
 	public void clear() {
-
 		// TODO: Implement this method
 		// go through array and set all values to null
+		for (int i = 0; i < table.length; i++) {
+			table[i] = null; // will this work for a linked list? or do we need to remove every value?
+		}
 
-   	}
-		// go through array and set all values to null/0
-
+	}
+	// go through array and set all values to null/0
 
 	@Override
 	public V get(K key) {
@@ -84,8 +100,9 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
 		// key equal to search key: search hit
 		if (table[index] != null) {
 			Iterator Iterator = table[index].iterator();
-			while(Iterator.hasNext()) {
-				if (Iterator.next() == key); //wrong need value to know what node it would be?
+			while (Iterator.hasNext()) {
+				return (V) Iterator.next(); // wrong need "value" to know what node it would be?
+				// or should we just return the first value in the linked list
 			}
 		}
 		// empty position (null key at indexed position): search miss
@@ -99,11 +116,10 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
 		// go through the whole table to see if any value is entered
 		int i = 0;
 		while (i < table.length) {
-			//increment empty if we hit a value
+			// increment empty if we hit a value
 			if (table[i] == null) {
 				i++;
-			}
-			else {
+			} else {
 				return false;
 			}
 		}
@@ -125,10 +141,10 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
 		// go through the whole table to see if any value is entered
 		for (int i = 0; i < table.length; i++) {
 			if (table[i] != null) {
-				//go though the linked nodes at this index
+				// go though the linked nodes at this index
 				count++;
 				Iterator Iterator = table[i].iterator();
-				while(Iterator.hasNext()) {
+				while (Iterator.hasNext()) {
 					count++;
 				}
 				// if value points to another value at the same index?
@@ -136,6 +152,6 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
 			}
 		}
 		// if enter increment the counter
-		return 0;
+		return count;
 	}
 }

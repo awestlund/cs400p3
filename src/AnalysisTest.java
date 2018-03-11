@@ -14,9 +14,9 @@ public class AnalysisTest {
 
                 // TODO Add code for checking command line arguments
                 
-                PerformanceAnalysisHash ana = new PerformanceAnalysisHash(args[0]);
-                ana.compareDataStructures();
-                ana.printReport();
+                PerformanceAnalysisHash pah = new PerformanceAnalysisHash(args[0]);
+                pah.compareDataStructures();
+                pah.printReport();
      }
     
 	HashTable<Integer, String> hashTable = null;
@@ -66,5 +66,30 @@ public class AnalysisTest {
 		actual = "" + hashTable.isEmpty();
 		if (!expected.equals(actual))
 			fail("expected: " + expected + " actual: " + actual);
+	}
+	@Test
+	public void test02_size_of_empty_hashTable() {
+		expected = "0";
+		actual = "" + hashTable.size();
+		if (!expected.equals(actual))
+			fail("expected: " + expected + " actual: " + actual);
+		
+	}
+	@Test
+	public void test03_clear_empty_hashTable() {
+		expected = "0";
+		hashTable.clear();
+		actual = "" + hashTable.size();
+		if (!expected.equals(actual))
+			fail("expected: " + expected + " actual: " + actual);
+		
+	}
+	@Test
+	public void test04_get_empty_hashTable() {
+		expected = "null";
+		actual = "" + hashTable.get(4);
+		if (!expected.equals(actual))
+			fail("expected: " + expected + " actual: " + actual);
+		
 	}
 }
