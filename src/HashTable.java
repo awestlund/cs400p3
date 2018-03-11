@@ -1,6 +1,7 @@
 import java.util.Iterator;
 import java.util.LinkedList;
 
+//https://docs.oracle.com/javase/7/docs/api/java/util/LinkedList.html#listIterator(int)
 public class HashTable<K, V> implements HashTableADT<K, V> {
 
 	/*
