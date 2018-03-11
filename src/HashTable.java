@@ -194,7 +194,7 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
 		// TODO: Implement this method
 		// go through array and set all values to null
 		for (int i = 0; i < table_size; i++) {
-			value_table[i] = null; // should work, we can ask ta.
+			value_table[i].clear();
 		}
 
 	}
@@ -226,7 +226,7 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
 		int i = 0;
 		while (i < table_size) {
 			// increment empty if we hit a value
-			if (value_table[i] == null) {
+			if (value_table[i].size() == 0) {
 				i++;
 			} else {
 				return false;
@@ -243,6 +243,38 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
 		return null;
 	}
 
+//	 public synchronized Object remove(Object key) {
+//			HashtableEntry tab[] = table;
+//			int hash = key.hashCode();
+//			int index = (hash & 0x7FFFFFFF) % tab.length;
+//			for (HashtableEntry e = tab[index], prev = null ; e != null ; prev = e, e = e.next) {
+//			    if ((e.hash == hash) && e.key.equals(key)) {
+//				if (prev != null) {
+//				    prev.next = e.next;
+//				} else {
+//				    tab[index] = e.next;
+//				}
+//				count--;
+//				return e.value;
+//			    }
+//			}
+//			return null;
+//		    }
+	//
+	// public synchronized Object clone() {
+	// try {
+	// Hashtable t = (Hashtable)super.clone();
+	// t.table = new HashtableEntry[table.length];
+	// for (int i = table.length ; i-- > 0 ; ) {
+	// t.table[i] = (table[i] != null)
+	// ? (HashtableEntry)table[i].clone() : null;
+	// }
+	// return t;
+	// } catch (CloneNotSupportedException e) {
+	// // this shouldn't happen, since we are Cloneable
+	// throw new InternalError();
+	// }
+	// }
 	@Override
 	public int size() { // me
 		// TODO: Implement this method
