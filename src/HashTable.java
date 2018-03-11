@@ -1,7 +1,7 @@
+
 import java.util.Iterator;
 import java.util.LinkedList;
 
-//https://docs.oracle.com/javase/7/docs/api/java/util/LinkedList.html#listIterator(int)
 public class HashTable<K, V> implements HashTableADT<K, V> {
 
 	/*
@@ -22,6 +22,7 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
 
 		this.table_size = 100;
 		table = (LinkedList<V>[]) new LinkedList[table_size]; // our hash table
+		// why are there two of these?
 
 	}
 
@@ -70,8 +71,40 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
 	}
 
 	private void rehash() {
-		// new array size
-		// i don't know how to do this
+		// int oldCap = table.length;
+		LinkedList<V> oldTable[] = table;
+
+		int newCap = table.length * 2;
+		table = new LinkedList[bestPrime(2 * table.length)];
+		for (int j = 0; j < table.length; j++)
+			table[j] = new LinkedList<V>();
+
+		// Copy table over
+		table_size = 0;
+		for (int i = 0; i < oldTable.length; i++) {
+//			for ( : oldTable[i])  //for.......i dont know
+				//insert value from old to new
+		}
+	}
+	// tried to do it, let me know what you think
+
+	// find next prime number, used for rehash
+	private int bestPrime(int n) {
+		int counter;
+		n++;
+		while (true) {
+			counter = 0;
+			for (int i = 2; i <= Math.sqrt(n); i++) {
+				if (n % i == 0)
+					counter++;
+			}
+			if (counter == 0) {
+				return n;
+			} else {
+				n++;
+				continue;
+			}
+		}
 	}
 
 	private void expand() {
@@ -88,7 +121,7 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
 		// TODO: Implement this method
 		// go through array and set all values to null
 		for (int i = 0; i < table.length; i++) {
-			table[i] = null; // will this work for a linked list? or do we need to remove every value?
+			table[i] = null; // should work, we can ask ta.
 		}
 
 	}
@@ -104,6 +137,7 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
 			while (Iterator.hasNext()) {
 				return (V) Iterator.next(); // wrong need "value" to know what node it would be?
 				// or should we just return the first value in the linked list
+				// not sure here either.
 			}
 		}
 		// empty position (null key at indexed position): search miss
