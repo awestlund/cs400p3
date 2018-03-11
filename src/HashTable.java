@@ -24,11 +24,12 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
 	 */
 	protected int table_size;
 	protected double loadFactor;
-	protected LinkedList<V>[] table;
+	protected LinkedList<V>[] table; //array of type linked list
 	// how to handle collisions? -> linked lists
 	public HashTable() {
 		//constructor
 		this.table_size = 100;
+		this.loadFactor = 0.75;
 		table  = (LinkedList<V>[]) new LinkedList[table_size]; // our hash table
 	}
 	public HashTable(int initialCapacity, double loadFactor) {
@@ -64,7 +65,10 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
 	@Override
 	public void clear() {
 		// TODO: Implement this method
-		// go through array and set all values to null/0
+		// go through array and set all values to null
+		for (int i = 0; i < table.length; i++) {
+    			table[i] = null;
+		}
 	}
 
 	@Override
