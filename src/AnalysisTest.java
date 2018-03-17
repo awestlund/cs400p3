@@ -10,14 +10,14 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class AnalysisTest {
-    public static void main(String[] args)  {
-
-                // TODO Add code for checking command line arguments
-                
-                PerformanceAnalysisHash pah = new PerformanceAnalysisHash(args[0]);
-                pah.compareDataStructures();
-                pah.printReport();
-     }
+//    public static void main(String[] args)  {
+//
+//                // TODO Add code for checking command line arguments
+//                
+//                PerformanceAnalysisHash pah = new PerformanceAnalysisHash(args[0]);
+//                pah.compareDataStructures();
+//                pah.printReport();
+//     }
     
 	HashTable<Integer, String> hashTable = null;
 	// can make more trees of different types
@@ -88,6 +88,131 @@ public class AnalysisTest {
 	public void test04_get_empty_hashTable() {
 		expected = "null";
 		actual = "" + hashTable.get(4);
+		if (!expected.equals(actual))
+			fail("expected: " + expected + " actual: " + actual);
+		
+	}
+	@Test
+	public void test05_remove_empty_hashTable() {
+		expected = "null";
+		actual = "" + hashTable.remove(4);
+		if (!expected.equals(actual))
+			fail("expected: " + expected + " actual: " + actual);
+		
+	}
+	@Test
+	public void test06_insert_1() {
+		expected = "cow";
+		hashTable.put(34, "cow");
+		actual = "" + hashTable.get(34);
+		if (!expected.equals(actual))
+			fail("expected: " + expected + " actual: " + actual);
+		
+	}
+	@Test
+	public void test07_remove_1() {
+		expected = "cow";
+		hashTable.put(34, "cow");
+		actual = "" + hashTable.remove(34);
+		if (!expected.equals(actual))
+			fail("expected: " + expected + " actual: " + actual);
+		
+	}
+	@Test
+	public void test08_remove_1_size() {
+		expected = "0";
+		hashTable.put(34, "cow");
+		hashTable.remove(34);
+		actual = "" + hashTable.size();
+		if (!expected.equals(actual))
+			fail("expected: " + expected + " actual: " + actual);
+		
+	}
+	@Test
+	public void test09_insert_1_size() {
+		expected = "1";
+		hashTable.put(34, "cow");
+		actual = "" + hashTable.size();
+		if (!expected.equals(actual))
+			fail("expected: " + expected + " actual: " + actual);
+		
+	}
+	@Test
+	public void test10_insert5_remove1_getsize() {
+		expected = "4";
+		hashTable.put(34, "cow");
+		hashTable.put(33, "wow");
+		hashTable.put(3, "zow");
+		hashTable.put(40, "meow");
+		hashTable.put(12, "pow");
+		hashTable.remove(3);
+		actual = "" + hashTable.size();
+		if (!expected.equals(actual))
+			fail("expected: " + expected + " actual: " + actual);
+		
+	}
+	@Test
+	public void test11_insert5_remove1_get() {
+		expected = "null";
+		hashTable.put(34, "cow");
+		hashTable.put(33, "wow");
+		hashTable.put(3, "zow");
+		hashTable.put(40, "meow");
+		hashTable.put(12, "pow");
+		hashTable.remove(3);
+		hashTable.get(3);
+		actual = "" + hashTable.get(3);
+		if (!expected.equals(actual))
+			fail("expected: " + expected + " actual: " + actual);
+		
+	}
+	@Test
+	public void test12_insert5_remove5_getsize() {
+		expected = "0";
+		hashTable.put(34, "cow");
+		hashTable.put(33, "wow");
+		hashTable.put(3, "zow");
+		hashTable.put(40, "meow");
+		hashTable.put(12, "pow");
+		hashTable.remove(34);
+		hashTable.remove(33);
+		hashTable.remove(3);
+		hashTable.remove(40);
+		hashTable.remove(12);
+		actual = "" + hashTable.size();
+		if (!expected.equals(actual))
+			fail("expected: " + expected + " actual: " + actual);
+		
+	}
+	@Test
+	public void test13_insert5_remove5_ofthesame_get1_size() {
+		expected = "0";
+		hashTable.put(34, "cow");
+		hashTable.put(34, "wow");
+		hashTable.put(34, "zow");
+		hashTable.put(34, "meow");
+		hashTable.put(34, "pow");
+		hashTable.remove(34);
+		hashTable.remove(33);
+		hashTable.remove(3);
+		hashTable.remove(40);
+		hashTable.remove(12);
+		hashTable.get(3);
+		actual = "" + hashTable.size();
+		if (!expected.equals(actual))
+			fail("expected: " + expected + " actual: " + actual);
+		
+	}
+	@Test
+	public void test14_insert5_clear() {
+		expected = "0";
+		hashTable.put(34, "cow");
+		hashTable.put(33, "wow");
+		hashTable.put(3, "zow");
+		hashTable.put(40, "meow");
+		hashTable.put(12, "pow");
+		hashTable.clear();
+		actual = "" + hashTable.size();
 		if (!expected.equals(actual))
 			fail("expected: " + expected + " actual: " + actual);
 		
