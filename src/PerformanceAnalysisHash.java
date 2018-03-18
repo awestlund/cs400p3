@@ -87,6 +87,27 @@ public class PerformanceAnalysisHash implements PerformanceAnalysis {
 	 */
 	@Override
 	public void compareInsertion() {
+		long startTimeImp = System.nanoTime();
+		for (int i= 0; i < inputData.size(); i++) {
+			hashTable.put(Integer.parseInt(inputData.get(i)), inputData.get(i));
+		}
+		long endTimeImp = System.nanoTime();
+		long elapsedTimeImp = (endTimeImp - startTimeImp)/1000;
+		
+		Runtime runtimeImp = Runtime.getRuntime();
+        runtimeImp.gc();
+        long memoryImp = runtimeImp.totalMemory() - runtimeImp.freeMemory();
+		
+		
+		long startTimeJava = System.nanoTime();
+		for (int i= 0; i < inputData.size(); i++) {
+			hashMap.put(Integer.parseInt(inputData.get(i)), inputData.get(i));
+		}
+		long endTimeJava = System.nanoTime();
+		long elapsedTimeJava = (endTimeJava - startTimeJava)/1000;
+		Runtime runtimeJava = Runtime.getRuntime();
+        runtimeJava.gc();
+        long memoryJava = runtimeImp.totalMemory() - runtimeImp.freeMemory();
 		// TODO: Complete this method
 		/* Adding elements to HashMap */
 		// hmap.put(12, "Chaitanya");
@@ -113,7 +134,7 @@ public class PerformanceAnalysisHash implements PerformanceAnalysis {
 		
 		long startTimeJava = System.nanoTime();
 		for (int i= 0; i < inputData.size(); i++) {
-			hashMap.remove(inputData.get(i));
+			hashMap.remove(Integer.parseInt(inputData.get(i)));
 		}
 		long endTimeJava = System.nanoTime();
 		long elapsedTimeJava = (endTimeJava - startTimeJava)/1000;
@@ -126,12 +147,32 @@ public class PerformanceAnalysisHash implements PerformanceAnalysis {
 	 */
 	@Override
 	public void compareSearch() {
+		long startTimeImp = System.nanoTime();
+		for (int i= 0; i < inputData.size(); i++) {
+			hashTable.get(Integer.parseInt(inputData.get(i)));
+		}
+		long endTimeImp = System.nanoTime();
+		long elapsedTimeImp = (endTimeImp - startTimeImp)/1000;
+		
+		Runtime runtimeImp = Runtime.getRuntime();
+        runtimeImp.gc();
+        long memoryImp = runtimeImp.totalMemory() - runtimeImp.freeMemory();
+		
+		
+		long startTimeJava = System.nanoTime();
+		for (int i= 0; i < inputData.size(); i++) {
+			hashMap.get(Integer.parseInt(inputData.get(i)));
+		}
+		long endTimeJava = System.nanoTime();
+		long elapsedTimeJava = (endTimeJava - startTimeJava)/1000;
+		Runtime runtimeJava = Runtime.getRuntime();
+        runtimeJava.gc();
+        long memoryJava = runtimeImp.totalMemory() - runtimeImp.freeMemory();
 		// TODO: Complete this method
 		/* Get values based on key */
 		// String var= hmap.get(2);
 		// Value get(Object key)
 	}
-
 	/*
 	 * An implementation of loading files into local data structure is provided to
 	 * you Please feel free to make any changes if required as per your
