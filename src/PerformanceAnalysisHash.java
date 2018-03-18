@@ -106,6 +106,10 @@ public class PerformanceAnalysisHash implements PerformanceAnalysis {
 		long endTimeImp = System.nanoTime();
 		long elapsedTimeImp = (endTimeImp - startTimeImp)/1000;
 		
+		Runtime runtimeImp = Runtime.getRuntime();
+        runtimeImp.gc();
+        long memoryImp = runtimeImp.totalMemory() - runtimeImp.freeMemory();
+		
 		
 		long startTimeJava = System.nanoTime();
 		for (int i= 0; i < inputData.size(); i++) {
@@ -113,6 +117,9 @@ public class PerformanceAnalysisHash implements PerformanceAnalysis {
 		}
 		long endTimeJava = System.nanoTime();
 		long elapsedTimeJava = (endTimeJava - startTimeJava)/1000;
+		Runtime runtimeJava = Runtime.getRuntime();
+        runtimeJava.gc();
+        long memoryJava = runtimeImp.totalMemory() - runtimeImp.freeMemory();
 	}
 	/**
 	 * Standalone method for comparing search operation across HashTable and TreeMap
