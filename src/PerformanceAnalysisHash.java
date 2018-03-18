@@ -99,12 +99,21 @@ public class PerformanceAnalysisHash implements PerformanceAnalysis {
 	 */
 	@Override
 	public void compareDeletion() {
-		// TODO: Complete this method
-		/* Remove values based on key */
-		// hmap.remove(3);
-		// Value remove(Object key)
+		long startTimeImp = System.nanoTime();
+		for (int i= 0; i < inputData.size(); i++) {
+			hashTable.remove(Integer.parseInt(inputData.get(i)));
+		}
+		long endTimeImp = System.nanoTime();
+		long elapsedTimeImp = (endTimeImp - startTimeImp)/1000;
+		
+		
+		long startTimeJava = System.nanoTime();
+		for (int i= 0; i < inputData.size(); i++) {
+			hashMap.remove(inputData.get(i));
+		}
+		long endTimeJava = System.nanoTime();
+		long elapsedTimeJava = (endTimeJava - startTimeJava)/1000;
 	}
-
 	/**
 	 * Standalone method for comparing search operation across HashTable and TreeMap
 	 */
