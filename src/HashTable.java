@@ -124,10 +124,15 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
 	public void clear() {
 		// TODO: Implement this method
 		// go through array and set all values to null
-		for (int i = 0; i < table_size; i++) {
-			value_table[i].clear();
-		}
-	
+		value_table = (LinkedList<V>[]) new LinkedList[table_size]; // our hash table
+		expanded = (LinkedList<V>[]) new LinkedList[table_size];
+		key_table = (LinkedList<K>[]) new LinkedList[table_size]; // our hash table
+		expanded_key =  (LinkedList<K>[]) new LinkedList[table_size];
+//		for (int i = 0; i < table_size; i++) {
+//			value_table[i].clear();
+//			//other arrays
+//		}
+		//
 	}
 
 	@Override
