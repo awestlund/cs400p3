@@ -1,6 +1,8 @@
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.lang.Object;
+import java.util.Formatter;
 
 //hash map example below!
 //https://beginnersbook.com/2013/12/hashmap-in-java-with-example/
@@ -9,7 +11,7 @@ public class PerformanceAnalysisHash implements PerformanceAnalysis {
 
 	// The input data from each file is stored in this/ per file
 	private ArrayList<String> inputData;
-	
+
 	public PerformanceAnalysisHash() {
 		// Constructor
 		HashTable<Integer, String> hashTable = new HashTable<Integer, String>();
@@ -24,10 +26,12 @@ public class PerformanceAnalysisHash implements PerformanceAnalysis {
 		HashMap<Integer, String> hashMap = new HashMap<Integer, String>();
 		try {
 			loadData(details_filename);
-		}catch (IOException e) {
+		} catch (IOException e) {
 			System.out.println("incorrect filename entered");
 			System.exit(0);
 		}
+		//parse the inputData array (no spaces, two elements on each line)
+		
 	}
 
 	/**
@@ -42,6 +46,21 @@ public class PerformanceAnalysisHash implements PerformanceAnalysis {
 		compareInsertion();
 		compareDeletion();
 		compareSearch();
+		// Memory Consumption of the Java program
+		System.out.println("The report name : Performance Analysis Report");
+		System.out.println(
+				"------------------------------------------------------------------------------------------------");
+		System.out.println(
+				"|            FileName|      Operation| Data Structure|   Time Taken (micro sec)|     Bytes Used|");
+		System.out.println(
+				"------------------------------------------------------------------------------------------------");
+		//data entered below with correct spaceing
+		//1. "|" filename 2. "|" get/PUT/remove 3. "|" HASHTABLE/TREEMAP,  "|" TIME(LONG),  "|" BYTES USED (INT) "|"
+		
+		//String padded = String.format("%21", ); //21, 17, 16, 27, 17
+		System.out.println(
+				"------------------------------------------------------------------------------------------------");
+		// Total runtime of a program
 
 	}
 
@@ -52,14 +71,14 @@ public class PerformanceAnalysisHash implements PerformanceAnalysis {
 	@Override
 	public void printReport() {
 		// TODO: Complete this method
-//		 /* Display content using Iterator*/
-//	      Set set = hmap.entrySet();
-//	      Iterator iterator = set.iterator();
-//	      while(iterator.hasNext()) {
-//	         Map.Entry mentry = (Map.Entry)iterator.next();
-//	         System.out.print("key is: "+ mentry.getKey() + " & Value is: ");
-//	         System.out.println(mentry.getValue());
-//	      }
+		// /* Display content using Iterator*/
+		// Set set = hmap.entrySet();
+		// Iterator iterator = set.iterator();
+		// while(iterator.hasNext()) {
+		// Map.Entry mentry = (Map.Entry)iterator.next();
+		// System.out.print("key is: "+ mentry.getKey() + " & Value is: ");
+		// System.out.println(mentry.getValue());
+		// }
 	}
 
 	/**
@@ -69,9 +88,9 @@ public class PerformanceAnalysisHash implements PerformanceAnalysis {
 	@Override
 	public void compareInsertion() {
 		// TODO: Complete this method
-		/*Adding elements to HashMap*/
-	     // hmap.put(12, "Chaitanya");
-		//value put(Key k, Value v)
+		/* Adding elements to HashMap */
+		// hmap.put(12, "Chaitanya");
+		// value put(Key k, Value v)
 	}
 
 	/**
@@ -81,9 +100,9 @@ public class PerformanceAnalysisHash implements PerformanceAnalysis {
 	@Override
 	public void compareDeletion() {
 		// TODO: Complete this method
-		/* Remove values based on key*/
-	     // hmap.remove(3);
-		//Value remove(Object key)
+		/* Remove values based on key */
+		// hmap.remove(3);
+		// Value remove(Object key)
 	}
 
 	/**
@@ -92,9 +111,9 @@ public class PerformanceAnalysisHash implements PerformanceAnalysis {
 	@Override
 	public void compareSearch() {
 		// TODO: Complete this method
-		/* Get values based on key*/
-	      //String var= hmap.get(2);
-		//Value get(Object key)
+		/* Get values based on key */
+		// String var= hmap.get(2);
+		// Value get(Object key)
 	}
 
 	/*
