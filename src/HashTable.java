@@ -21,7 +21,7 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
 	public HashTable() {
 		// constructor
 
-		this.table_size = 100;
+		this.table_size = 1000;
 		this.LOAD_FACTOR = 0.75;
 		value_table = (LinkedList<V>[]) new LinkedList[table_size]; // our hash table
 		expanded = (LinkedList<V>[]) new LinkedList[table_size];
@@ -96,29 +96,6 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
 			}
 		}
 	}
-
-	// // Makes sure the key is not already in the hashtable.
-	// HashtableEntry tab[] = table;
-	// int hash = key.hashCode();
-	// int index = (hash & 0x7FFFFFFF) % tab.length;
-	// for (HashtableEntry e = tab[index] ; e != null ; e = e.next) {
-	// if ((e.hash == hash) && e.key.equals(key)) {
-	// Object old = e.value;
-	// e.value = value;
-	// return old;
-	// }
-	// }
-	//
-	// // Creates the new entry.
-	// HashtableEntry e = new HashtableEntry();
-	// e.hash = hash;
-	// e.key = key;
-	// e.value = value;
-	// e.next = tab[index];
-	// tab[index] = e;
-	// count++;
-	// return null;
-	// }
 
 	@Override
 	public void clear() {
@@ -226,20 +203,6 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
 		return null;
 	}
 
-	// public synchronized Object clone() {
-	// try {
-	// Hashtable t = (Hashtable)super.clone();
-	// t.table = new HashtableEntry[table.length];
-	// for (int i = table.length ; i-- > 0 ; ) {
-	// t.table[i] = (table[i] != null)
-	// ? (HashtableEntry)table[i].clone() : null;
-	// }
-	// return t;
-	// } catch (CloneNotSupportedException e) {
-	// // this shouldn't happen, since we are Cloneable
-	// throw new InternalError();
-	// }
-	// }
 	@Override
 	public int size() { // me
 		// TODO: Implement this method
@@ -249,15 +212,10 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
 			if (value_table[i] != null) {
 				// go though the linked nodes at this index
 				count = count + value_table[i].size();
-				// Iterator Iterator = value_table[i].iterator();
-				// while (Iterator.hasNext()) {
-				// count++;
 			}
-			// if value points to another value at the same index?
-			// go through bucket at each index
+
 		}
-		// }
-		// if enter increment the counter
+
 		return count;
 	}
 
@@ -323,6 +281,7 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
 	private void expand() {
 		// expand the array size when the load factor is hit
 		// double the array size
+		// += old expanded array = new bigger array
 		expanded = (LinkedList<V>[]) new LinkedList[bestPrime(table_size)];
 		expanded_key = (LinkedList<K>[]) new LinkedList[bestPrime(table_size)];
 		for (int j = 0; j < table_size; j++) {

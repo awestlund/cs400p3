@@ -1,6 +1,7 @@
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.lang.Object;
 import java.util.Formatter;
@@ -17,21 +18,20 @@ public class PerformanceAnalysisHash implements PerformanceAnalysis {
 	// .add after each comparison
 	private LinkedList<String> pathnames;
 	private ArrayList<String> dataFiles;
-	private HashTable<Integer, String> hashTable;
-	private HashMap<Integer, String> hashMap;
+	private HashTable<String, String> hashTable;
+	private HashMap<String, String> TreeMap;
 
 	public PerformanceAnalysisHash() {
 		// Constructor
-		hashTable = new HashTable<Integer, String>();
-		hashMap = new HashMap<Integer, String>();
-		// get data from file given
-		// put in inputData arraylist
+//		hashTable = new HashTable<String, String>();
+//		TreeMap = new HashMap<String, String>();
+
 	}
 
 	public PerformanceAnalysisHash(String details_filename) {
 		// TODO: Save the details of the test data files
-		hashTable = new HashTable<Integer, String>();
-		hashMap = new HashMap<Integer, String>();
+//		hashTable = new HashTable<String, String>();
+//		TreeMap = new HashMap<String, String>();
 		try {
 			loadData(details_filename);
 		} catch (IOException e) {
@@ -48,15 +48,9 @@ public class PerformanceAnalysisHash implements PerformanceAnalysis {
 			// inputData.set(i, inputData.get(i).replace(" ", ""));
 			temp = inputData.get(i).split(",");
 			dataFiles.add(i, path + "/" + temp[0].trim()); // absolute path?
+			pathnames.add(temp[0].trim()); // save the file names to a linked list
 		}
-		// for (int j = 0; j < inputData.size(); j++) {
-		// try {
-		// loadData(inputData.get(j));
-		// } catch (IOException e) {
-		// System.out.println("incorrect filename entered");
-		// System.exit(0);
-		// }
-		// }
+
 	}
 
 	/**
@@ -67,15 +61,38 @@ public class PerformanceAnalysisHash implements PerformanceAnalysis {
 	 */
 	@Override
 	public void compareDataStructures() {
-		// for filepath in dataFiles do every thing below
-		//loadData for the file into inputData
-		//compareInsertion();
-		//compareDeletion();
-		//compareSearch();
-		//repeat
 		// TODO: Complete this function which compares the ds and generates the details
-
-		// Total runtime of a program
+		int count = 0;
+		Iterator<String> it = pathnames.iterator();
+		for (int i = 0; i < dataFiles.size(); i++) {
+			try {
+				loadData(dataFiles.get(i));
+				// trim all of the data
+				for (int j = 0; j < inputData.size(); j++) {
+					// replace all data with trimmed data
+					inputData.add(j, inputData.get(j).trim());
+				}
+				//clears old hashtables in insertion by making new tables
+				compareInsertion();
+				compareSearch();
+				compareDeletion();
+				
+				// make the current file name the first on in pathnames so that we know where we
+				// are at in the compare methods
+				// so delete name when we are done using it in order
+				while (it.hasNext()) {
+					if (count == i) {
+						pathnames.remove(i);
+					}
+					count++;
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				System.out.println("incorrect filename entered");
+				System.exit(0);
+			}
+			// now inputData is updated to the new .txt
+		}
 
 	}
 
@@ -92,24 +109,14 @@ public class PerformanceAnalysisHash implements PerformanceAnalysis {
 				"|            FileName|      Operation| Data Structure|   Time Taken (micro sec)|     Bytes Used|");
 		System.out.println(
 				"------------------------------------------------------------------------------------------------");
-
+		for (int i = 0; i < reportData.size(); i++) {
+			System.out.println(reportData.get(i));
+		}
 		// loop through report and print out every line
 		// report.add(String.format("|%21s|%17s|%16s|%27s|%17s|", )); //21, 17, 16, 27,
 		// 17
 		System.out.println(
 				"------------------------------------------------------------------------------------------------");
-		// Total runtime of a program
-		//print reportData in a loop
-		
-		// TODO: Complete this method
-		// /* Display content using Iterator*/
-		// Set set = hmap.entrySet();
-		// Iterator iterator = set.iterator();
-		// while(iterator.hasNext()) {
-		// Map.Entry mentry = (Map.Entry)iterator.next();
-		// System.out.print("key is: "+ mentry.getKey() + " & Value is: ");
-		// System.out.println(mentry.getValue());
-		// }
 	}
 
 	/**
@@ -119,32 +126,85 @@ public class PerformanceAnalysisHash implements PerformanceAnalysis {
 	@Override
 	public void compareInsertion() {
 		// TODO: Complete this method
+		// make new tree
+		hashTable = new HashTable<String, String>();
+		// put data in the tree
 		long startTimeImp = System.nanoTime();
-		for (int i= 0; i < inputData.size(); i++) {
-			hashTable.put(Integer.parseInt(inputData.get(i)), inputData.get(i));
+		// all data is in string form
+		for (int i = 0; i < inputData.size(); i++) {
+			hashTable.put((inputData.get(i)), inputData.get(i));
+			// hashTable.put(Integer.parseInt(inputData.get(i)), inputData.get(i));
 		}
 		long endTimeImp = System.nanoTime();
-		long elapsedTimeImp = (endTimeImp - startTimeImp)/1000;
-		
+		long elapsedTimeImp = (endTimeImp - startTimeImp) / 1000;
+
 		Runtime runtimeImp = Runtime.getRuntime();
-        runtimeImp.gc();
-        long memoryImp = runtimeImp.totalMemory() - runtimeImp.freeMemory();
+		runtimeImp.gc();
+		long memoryImp = runtimeImp.totalMemory() - runtimeImp.freeMemory();
+		String filename = pathnames.getFirst();
 		
+		// add values to the report to be printed
+		reportData.add(
+				String.format("|%21s|%17s|%16s|%27%.1ld|%17%.0ld|", filename, "PUT", "HASHTABLE", elapsedTimeImp, memoryImp));
+		
+		// TreeMap part
+		TreeMap = new HashMap<String, String>();
 		
 		long startTimeJava = System.nanoTime();
-		for (int i= 0; i < inputData.size(); i++) {
-			hashMap.put(Integer.parseInt(inputData.get(i)), inputData.get(i));
+		for (int i = 0; i < inputData.size(); i++) {
+			TreeMap.put((inputData.get(i)), inputData.get(i));
 		}
 		long endTimeJava = System.nanoTime();
-		long elapsedTimeJava = (endTimeJava - startTimeJava)/1000;
+		long elapsedTimeJava = (endTimeJava - startTimeJava) / 1000;
 		Runtime runtimeJava = Runtime.getRuntime();
-        runtimeJava.gc();
-        long memoryJava = runtimeImp.totalMemory() - runtimeImp.freeMemory();
-		// TODO: Complete this method
-		/* Adding elements to HashMap */
-		// hmap.put(12, "Chaitanya");
-		// value put(Key k, Value v)
+		runtimeJava.gc();
+		long memoryJava = runtimeImp.totalMemory() - runtimeImp.freeMemory();
+		
+		reportData.add(
+				String.format("|%21s|%17s|%16s|%27%.1ld|%17%.0ld|", filename, "PUT", "TREEMAP", elapsedTimeJava, memoryJava));
+
+	}
+
+	/**
+	 * Standalone method for comparing search operation across HashTable and TreeMap
+	 */
+	@Override
+	public void compareSearch() {
+		
+		String filename = pathnames.getFirst(); //GETS FILE NAME
+		
+		// for (int i = 0; i > inputData.size(); i++) {
+		// load data
+		// trim data make into string
+		// make new hash table and tree map
+		// run tests
+		// add results into result array to be printed
+		long startTimeImp = System.nanoTime();
+		for (int j = 0; j < inputData.size(); j++) {
+			hashTable.get((inputData.get(j)));
+		}
+		long endTimeImp = System.nanoTime();
+		long elapsedTimeImp = (endTimeImp - startTimeImp) / 1000;
 	
+		Runtime runtimeImp = Runtime.getRuntime();
+		runtimeImp.gc();
+		long memoryImp = runtimeImp.totalMemory() - runtimeImp.freeMemory();
+		
+		reportData.add(
+				String.format("|%21s|%17s|%16s|%27%.1ld|%17%.0ld|", filename, "GET", "HASHTABLE", elapsedTimeImp, memoryImp));
+		
+		long startTimeJava = System.nanoTime();
+		for (int k = 0; k < inputData.size(); k++) {
+			TreeMap.get(Integer.parseInt(inputData.get(k)));
+		}
+		long endTimeJava = System.nanoTime();
+		long elapsedTimeJava = (endTimeJava - startTimeJava) / 1000;
+		Runtime runtimeJava = Runtime.getRuntime();
+		runtimeJava.gc();
+		long memoryJava = runtimeImp.totalMemory() - runtimeImp.freeMemory();
+		
+		reportData.add(
+				String.format("|%21s|%17s|%16s|%27%.1ld|%17%.0ld|", filename, "GET", "TREEMAP", elapsedTimeJava, memoryJava));
 	}
 
 	/**
@@ -153,59 +213,35 @@ public class PerformanceAnalysisHash implements PerformanceAnalysis {
 	 */
 	@Override
 	public void compareDeletion() {
+		
+		String filename = pathnames.getFirst(); //GETS FILE NAME
+		
 		long startTimeImp = System.nanoTime();
-		for (int i= 0; i < inputData.size(); i++) {
-			hashTable.remove(Integer.parseInt(inputData.get(i)));
+		for (int i = 0; i < inputData.size(); i++) {
+			hashTable.remove((inputData.get(i)));
 		}
 		long endTimeImp = System.nanoTime();
-		long elapsedTimeImp = (endTimeImp - startTimeImp)/1000;
-		
-		Runtime runtimeImp = Runtime.getRuntime();
-        runtimeImp.gc();
-        long memoryImp = runtimeImp.totalMemory() - runtimeImp.freeMemory();
-		
-		
-		long startTimeJava = System.nanoTime();
-		for (int i= 0; i < inputData.size(); i++) {
-			hashMap.remove(Integer.parseInt(inputData.get(i)));
-		}
-		long endTimeJava = System.nanoTime();
-		long elapsedTimeJava = (endTimeJava - startTimeJava)/1000;
-		Runtime runtimeJava = Runtime.getRuntime();
-        runtimeJava.gc();
-        long memoryJava = runtimeImp.totalMemory() - runtimeImp.freeMemory();
-	}
+		long elapsedTimeImp = (endTimeImp - startTimeImp) / 1000;
 
-	/**
-	 * Standalone method for comparing search operation across HashTable and TreeMap
-	 */
-	@Override
-	public void compareSearch() {
-		long startTimeImp = System.nanoTime();
-		for (int i= 0; i < inputData.size(); i++) {
-			hashTable.get(Integer.parseInt(inputData.get(i)));
-		}
-		long endTimeImp = System.nanoTime();
-		long elapsedTimeImp = (endTimeImp - startTimeImp)/1000;
-		
 		Runtime runtimeImp = Runtime.getRuntime();
-        runtimeImp.gc();
-        long memoryImp = runtimeImp.totalMemory() - runtimeImp.freeMemory();
-		
+		runtimeImp.gc();
+		long memoryImp = runtimeImp.totalMemory() - runtimeImp.freeMemory();
+
+		reportData.add(
+				String.format("|%21s|%17s|%16s|%27%.1ld|%17%.0ld|", filename, "REMOVE", "HASHTABLE", elapsedTimeImp, memoryImp));
 		
 		long startTimeJava = System.nanoTime();
-		for (int i= 0; i < inputData.size(); i++) {
-			hashMap.get(Integer.parseInt(inputData.get(i)));
+		for (int i = 0; i < inputData.size(); i++) {
+			TreeMap.remove((inputData.get(i)));
 		}
 		long endTimeJava = System.nanoTime();
-		long elapsedTimeJava = (endTimeJava - startTimeJava)/1000;
+		long elapsedTimeJava = (endTimeJava - startTimeJava) / 1000;
 		Runtime runtimeJava = Runtime.getRuntime();
-        runtimeJava.gc();
-        long memoryJava = runtimeImp.totalMemory() - runtimeImp.freeMemory();
-		// TODO: Complete this method
-		/* Get values based on key */
-		// String var= hmap.get(2);
-		// Value get(Object key)
+		runtimeJava.gc();
+		long memoryJava = runtimeImp.totalMemory() - runtimeImp.freeMemory();
+		
+		reportData.add(
+				String.format("|%21s|%17s|%16s|%27%.1ld|%17%.0ld|", filename, "REMOVE", "TREEMAP", elapsedTimeJava, memoryJava));
 	}
 
 	/*
