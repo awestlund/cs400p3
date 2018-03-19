@@ -13,11 +13,11 @@ public class PerformanceAnalysisHash implements PerformanceAnalysis {
 
 	// The input data from each file is stored in this/ per file
 	// private ArrayList<String> inputData;
-	private ArrayList<String> inputData;
-	private ArrayList<String> reportData; // everything that needs to be printed out
+	private ArrayList<String> inputData; // = new ArrayList<String>();
+	private ArrayList<String> reportData = new ArrayList<String>(); // everything that needs to be printed out
 	// .add after each comparison
-	private LinkedList<String> pathnames;
-	private ArrayList<String> dataFiles;
+	private LinkedList<String> pathnames = new LinkedList<String>();
+	private ArrayList<String> dataFiles = new ArrayList<String>();
 	private HashTable<String, String> hashTable;
 	private HashMap<String, String> TreeMap;
 
@@ -34,21 +34,23 @@ public class PerformanceAnalysisHash implements PerformanceAnalysis {
 //		TreeMap = new HashMap<String, String>();
 		try {
 			loadData(details_filename);
+			// parse the inputData array (no spaces, two elements on each line)
+			String[] temp = new String[2];
+			String path2 = inputData.get(0);
+			temp = path2.split(",");
+			String path = temp[1].trim().replace("../", "");
+			inputData.remove(0);
+			for (int i = 0; i < inputData.size(); i++) {
+				// get all of the file names
+				String file = inputData.get(i);
+				temp = file.split(",");
+				String filename = (path +"/"+ temp[0].trim()).replaceAll("/", File.separator);
+				dataFiles.add(i, filename); // absolute path?
+				pathnames.add(temp[0].trim()); // save the file names to a linked list
+			}
 		} catch (IOException e) {
 			System.out.println("incorrect filename entered");
 			System.exit(0);
-		}
-
-		// parse the inputData array (no spaces, two elements on each line)
-		String[] temp = new String[2];
-		temp = inputData.get(0).split(",");
-		String path = temp[0].trim();
-		for (int i = 1; i < inputData.size(); i++) {
-			// get all of the file names
-			// inputData.set(i, inputData.get(i).replace(" ", ""));
-			temp = inputData.get(i).split(",");
-			dataFiles.add(i, path + "/" + temp[0].trim()); // absolute path?
-			pathnames.add(temp[0].trim()); // save the file names to a linked list
 		}
 
 	}
@@ -195,7 +197,7 @@ public class PerformanceAnalysisHash implements PerformanceAnalysis {
 		
 		long startTimeJava = System.nanoTime();
 		for (int k = 0; k < inputData.size(); k++) {
-			TreeMap.get(Integer.parseInt(inputData.get(k)));
+			TreeMap.get((inputData.get(k)));
 		}
 		long endTimeJava = System.nanoTime();
 		long elapsedTimeJava = (endTimeJava - startTimeJava) / 1000;
