@@ -21,7 +21,7 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
 	public HashTable() {
 		// constructor
 
-		this.table_size = 1000;
+		this.table_size = bestPrime(4);
 		this.LOAD_FACTOR = 0.75;
 		value_table = (LinkedList<V>[]) new LinkedList[table_size]; // our hash table
 		expanded = (LinkedList<V>[]) new LinkedList[table_size];
@@ -37,7 +37,7 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
 	}
 
 	public HashTable(int initialCapacity, double loadFactor) {
-		this.table_size = initialCapacity;
+		this.table_size = bestPrime(initialCapacity);
 		this.LOAD_FACTOR = loadFactor;
 		value_table = (LinkedList<V>[]) new LinkedList[table_size]; // our hash table
 		expanded = (LinkedList<V>[]) new LinkedList[table_size];
@@ -133,8 +133,9 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
 			int count2 = 0;
 			Iterator<V> it2 = value_table[index].iterator();
 			while (it2.hasNext()) {
+				V ret_this = it2.next();
 				if (count2 == count) {
-					return it2.next();
+					return ret_this;
 				}
 				count2++;
 			}
@@ -187,8 +188,9 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
 			int count2 = 0;
 			Iterator<V> it2 = value_table[index].iterator();
 			while (it2.hasNext()) {
+				V ret_this = it2.next();
 				if (count2 == count) {
-					V ret_this = it2.next();
+					//V ret_this = it2.next();
 					// if the correct value is there, delete it
 					if (value_table[index].contains(ret_this)) {
 							key_table[index].remove(key);
@@ -228,7 +230,7 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
 		// int oldCap = table.length;
 		LinkedList<V> oldTable[] = value_table;
 		LinkedList<K> oldTableKey[] = key_table;
-		table_size = table_size * 2;
+		table_size = bestPrime(table_size * 2);
 //		V value = null;
 //		K key;
 		expand();
