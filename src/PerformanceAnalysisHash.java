@@ -1,20 +1,58 @@
+
+//////////////////// ALL ASSIGNMENTS INCLUDE THIS SECTION /////////////////////
+//
+// Title:           HashTable
+// Files:           AnalysisTest.java, HashTable.java, HashTableADT.java, 
+//					PerformanceAnalysis.java, PerformanceAnalysisHash.java
+// Course:          CS400
+//
+// Author:          Susie Chongthaweephol
+// Email:           chongthaweep@wisc.edu
+// Lecturer's Name: Debra Deppeler
+//
+//////////////////// PAIR PROGRAMMERS COMPLETE THIS SECTION ///////////////////
+//
+// Partner Name:    Amber Westlund
+// Partner Email:   awestlund@wisc.edu
+// Lecturer's Name: Debra Deppeler
+// 
+// VERIFY THE FOLLOWING BY PLACING AN X NEXT TO EACH TRUE STATEMENT:
+//   _X_ Write-up states that pair programming is allowed for this assignment.
+//   _X_ We have both read and understand the course Pair Programming Policy.
+//   _X_ We have registered our team prior to the team registration deadline.
+//
+///////////////////////////// CREDIT OUTSIDE HELP /////////////////////////////
+//
+// Students who get help from sources other than their partner must fully 
+// acknowledge and credit those sources of help here.  Instructors and TAs do 
+// not need to be credited here, but tutors, friends, relatives, room mates 
+// strangers, etc do.  If you received no outside help from either type of 
+// source, then please explicitly indicate NONE.
+//
+// Persons:         none
+// Online Sources:  none
+//
+/////////////////////////////// 80 COLUMNS WIDE ///////////////////////////////
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.lang.Object;
-import java.util.Formatter;
 
-//hash map example below!
-//https://beginnersbook.com/2013/12/hashmap-in-java-with-example/
-
+/**
+ * This class uses the HashTable that we created, reads in data from files and
+ * prints out the output in a txt file.
+ *
+ * Bugs: compareDataStructures() throws an IOException.
+ *
+ * @author Amber
+ * @author Susie
+ */
 public class PerformanceAnalysisHash implements PerformanceAnalysis {
-
 	// The input data from each file is stored in this/ per file
-	// private ArrayList<String> inputData;
-	private ArrayList<String> inputData; // = new ArrayList<String>();
-	private ArrayList<String> reportData = new ArrayList<String>(); // everything that needs to be printed out
+	private ArrayList<String> inputData;
+	// everything that needs to be printed out
+	private ArrayList<String> reportData = new ArrayList<String>();
 	// .add after each comparison
 	private LinkedList<String> pathnames = new LinkedList<String>();
 	private ArrayList<String> dataFiles = new ArrayList<String>();
@@ -22,16 +60,9 @@ public class PerformanceAnalysisHash implements PerformanceAnalysis {
 	private HashMap<String, String> TreeMap;
 
 	public PerformanceAnalysisHash() {
-		// Constructor
-//		hashTable = new HashTable<String, String>();
-//		TreeMap = new HashMap<String, String>();
-
 	}
 
 	public PerformanceAnalysisHash(String details_filename) {
-		// TODO: Save the details of the test data files
-//		hashTable = new HashTable<String, String>();
-//		TreeMap = new HashMap<String, String>();
 		try {
 			loadData(details_filename);
 			// parse the inputData array (no spaces, two elements on each line)
@@ -44,8 +75,8 @@ public class PerformanceAnalysisHash implements PerformanceAnalysis {
 				// get all of the file names
 				String file = inputData.get(i);
 				temp = file.split(",");
-				String filename = (path +"/"+ temp[0].trim()).replaceAll("/", File.separator);
-				dataFiles.add(i, filename); // absolute path?
+				String filename = (path + "/" + temp[0].trim()).replaceAll("/", File.separator);
+				dataFiles.add(i, filename); // absolute path
 				pathnames.add(temp[0].trim()); // save the file names to a linked list
 			}
 		} catch (IOException e) {
@@ -63,7 +94,6 @@ public class PerformanceAnalysisHash implements PerformanceAnalysis {
 	 */
 	@Override
 	public void compareDataStructures() {
-		// TODO: Complete this function which compares the ds and generates the details
 		int count = 0;
 		Iterator<String> it = pathnames.iterator();
 		for (int i = 0; i < dataFiles.size(); i++) {
@@ -74,12 +104,13 @@ public class PerformanceAnalysisHash implements PerformanceAnalysis {
 					// replace all data with trimmed data
 					inputData.add(j, inputData.get(j).trim());
 				}
-				//clears old hashtables in insertion by making new tables
+				// clears old hashtables in insertion by making new tables
 				compareInsertion();
 				compareSearch();
 				compareDeletion();
-				
-				// make the current file name the first on in pathnames so that we know where we
+
+				// make the current file name the first on in pathnames
+				// so that we know where we
 				// are at in the compare methods
 				// so delete name when we are done using it in order
 				while (it.hasNext()) {
@@ -89,7 +120,6 @@ public class PerformanceAnalysisHash implements PerformanceAnalysis {
 					count++;
 				}
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				System.out.println("incorrect filename entered");
 				System.exit(0);
 			}
@@ -114,9 +144,6 @@ public class PerformanceAnalysisHash implements PerformanceAnalysis {
 		for (int i = 0; i < reportData.size(); i++) {
 			System.out.println(reportData.get(i));
 		}
-		// loop through report and print out every line
-		// report.add(String.format("|%21s|%17s|%16s|%27s|%17s|", )); //21, 17, 16, 27,
-		// 17
 		System.out.println(
 				"------------------------------------------------------------------------------------------------");
 	}
@@ -127,7 +154,6 @@ public class PerformanceAnalysisHash implements PerformanceAnalysis {
 	 */
 	@Override
 	public void compareInsertion() {
-		// TODO: Complete this method
 		// make new tree
 		hashTable = new HashTable<String, String>();
 		// put data in the tree
@@ -144,14 +170,14 @@ public class PerformanceAnalysisHash implements PerformanceAnalysis {
 		runtimeImp.gc();
 		long memoryImp = runtimeImp.totalMemory() - runtimeImp.freeMemory();
 		String filename = pathnames.getFirst();
-		
+
 		// add values to the report to be printed
-		reportData.add(
-				String.format("|%21s|%17s|%16s|%27%.1ld|%17%.0ld|", filename, "PUT", "HASHTABLE", elapsedTimeImp, memoryImp));
-		
+		reportData.add(String.format("|%21s|%17s|%16s|%27%.1ld|%17%.0ld|", filename, "PUT", "HASHTABLE", elapsedTimeImp,
+				memoryImp));
+
 		// TreeMap part
 		TreeMap = new HashMap<String, String>();
-		
+
 		long startTimeJava = System.nanoTime();
 		for (int i = 0; i < inputData.size(); i++) {
 			TreeMap.put((inputData.get(i)), inputData.get(i));
@@ -161,9 +187,9 @@ public class PerformanceAnalysisHash implements PerformanceAnalysis {
 		Runtime runtimeJava = Runtime.getRuntime();
 		runtimeJava.gc();
 		long memoryJava = runtimeImp.totalMemory() - runtimeImp.freeMemory();
-		
-		reportData.add(
-				String.format("|%21s|%17s|%16s|%27%.1ld|%17%.0ld|", filename, "PUT", "TREEMAP", elapsedTimeJava, memoryJava));
+
+		reportData.add(String.format("|%21s|%17s|%16s|%27%.1ld|%17%.0ld|", filename, "PUT", "TREEMAP", elapsedTimeJava,
+				memoryJava));
 
 	}
 
@@ -172,10 +198,8 @@ public class PerformanceAnalysisHash implements PerformanceAnalysis {
 	 */
 	@Override
 	public void compareSearch() {
-		
-		String filename = pathnames.getFirst(); //GETS FILE NAME
-		
-		// for (int i = 0; i > inputData.size(); i++) {
+
+		String filename = pathnames.getFirst(); // GETS FILE NAME
 		// load data
 		// trim data make into string
 		// make new hash table and tree map
@@ -187,14 +211,14 @@ public class PerformanceAnalysisHash implements PerformanceAnalysis {
 		}
 		long endTimeImp = System.nanoTime();
 		long elapsedTimeImp = (endTimeImp - startTimeImp) / 1000;
-	
+
 		Runtime runtimeImp = Runtime.getRuntime();
 		runtimeImp.gc();
 		long memoryImp = runtimeImp.totalMemory() - runtimeImp.freeMemory();
-		
-		reportData.add(
-				String.format("|%21s|%17s|%16s|%27%.1ld|%17%.0ld|", filename, "GET", "HASHTABLE", elapsedTimeImp, memoryImp));
-		
+
+		reportData.add(String.format("|%21s|%17s|%16s|%27%.1ld|%17%.0ld|", filename, "GET", "HASHTABLE", elapsedTimeImp,
+				memoryImp));
+
 		long startTimeJava = System.nanoTime();
 		for (int k = 0; k < inputData.size(); k++) {
 			TreeMap.get((inputData.get(k)));
@@ -204,9 +228,9 @@ public class PerformanceAnalysisHash implements PerformanceAnalysis {
 		Runtime runtimeJava = Runtime.getRuntime();
 		runtimeJava.gc();
 		long memoryJava = runtimeImp.totalMemory() - runtimeImp.freeMemory();
-		
-		reportData.add(
-				String.format("|%21s|%17s|%16s|%27%.1ld|%17%.0ld|", filename, "GET", "TREEMAP", elapsedTimeJava, memoryJava));
+
+		reportData.add(String.format("|%21s|%17s|%16s|%27%.1ld|%17%.0ld|", filename, "GET", "TREEMAP", elapsedTimeJava,
+				memoryJava));
 	}
 
 	/**
@@ -215,9 +239,9 @@ public class PerformanceAnalysisHash implements PerformanceAnalysis {
 	 */
 	@Override
 	public void compareDeletion() {
-		
-		String filename = pathnames.getFirst(); //GETS FILE NAME
-		
+
+		String filename = pathnames.getFirst(); // GETS FILE NAME
+
 		long startTimeImp = System.nanoTime();
 		for (int i = 0; i < inputData.size(); i++) {
 			hashTable.remove((inputData.get(i)));
@@ -229,9 +253,9 @@ public class PerformanceAnalysisHash implements PerformanceAnalysis {
 		runtimeImp.gc();
 		long memoryImp = runtimeImp.totalMemory() - runtimeImp.freeMemory();
 
-		reportData.add(
-				String.format("|%21s|%17s|%16s|%27%.1ld|%17%.0ld|", filename, "REMOVE", "HASHTABLE", elapsedTimeImp, memoryImp));
-		
+		reportData.add(String.format("|%21s|%17s|%16s|%27%.1ld|%17%.0ld|", filename, "REMOVE", "HASHTABLE",
+				elapsedTimeImp, memoryImp));
+
 		long startTimeJava = System.nanoTime();
 		for (int i = 0; i < inputData.size(); i++) {
 			TreeMap.remove((inputData.get(i)));
@@ -241,9 +265,9 @@ public class PerformanceAnalysisHash implements PerformanceAnalysis {
 		Runtime runtimeJava = Runtime.getRuntime();
 		runtimeJava.gc();
 		long memoryJava = runtimeImp.totalMemory() - runtimeImp.freeMemory();
-		
-		reportData.add(
-				String.format("|%21s|%17s|%16s|%27%.1ld|%17%.0ld|", filename, "REMOVE", "TREEMAP", elapsedTimeJava, memoryJava));
+
+		reportData.add(String.format("|%21s|%17s|%16s|%27%.1ld|%17%.0ld|", filename, "REMOVE", "TREEMAP",
+				elapsedTimeJava, memoryJava));
 	}
 
 	/*
