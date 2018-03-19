@@ -227,22 +227,22 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
 	private void rehash() {
 		// int oldCap = table.length;
 		LinkedList<V> oldTable[] = value_table;
+		LinkedList<K> oldTableKey[] = key_table;
 		table_size = table_size * 2;
 		expand();
-		// int newCap = value_table.length * 2;
-		// value_table = new LinkedList[bestPrime(2 * value_table.length)];
-		for (int j = 0; j < table_size; j++)
-			value_table[j] = new LinkedList<V>();
-
-		// Copy table over
-		table_size = 0;
-		for (int i = 0; i < oldTable.length; i++) {
-			// for ( : oldTable[i]) //for.......i dont know
-			// insert value from old to new
+		
+		value_table = expanded;
+		key_table = expanded_key;
+		
+//        table_size = 0;
+        for( int i = 0; i < oldTable.length; i++ )
+            for( V value : oldTable[i] ) {
+            	for( K key : oldTableKey[i] ) {
+            		put(key,value);
+            	}
+            }
 
 		}
-		// RENAME
-	}
 
 	// tried to do it, let me know what you think
 	private boolean findKey(K key) {
