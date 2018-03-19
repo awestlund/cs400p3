@@ -224,25 +224,32 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
 		return key.hashCode();
 	}
 
-	private void rehash() {
+		private void rehash() {
 		// int oldCap = table.length;
 		LinkedList<V> oldTable[] = value_table;
 		LinkedList<K> oldTableKey[] = key_table;
 		table_size = table_size * 2;
+//		V value = null;
+//		K key;
 		expand();
 		
 		value_table = expanded;
 		key_table = expanded_key;
 		
 //        table_size = 0;
-        for( int i = 0; i < oldTable.length; i++ )
-            for( V value : oldTable[i] ) {
-            	for( K key : oldTableKey[i] ) {
-            		put(key,value);
+        for( int i = 0; i < oldTable.length; i++ ) {
+//            for( V value : oldTable[i] ) {
+//            	put(value);
+//            }
+            	for(K key : oldTableKey[i] ) {
+//            		value = value_table[i];
+            		put(key, get(key));
             	}
+//            	for( V value : oldTable[i] ) {
+//                	put(hash((K)getKey(value)), value);
+//                }
+        }
             }
-
-		}
 
 	// tried to do it, let me know what you think
 	private boolean findKey(K key) {
